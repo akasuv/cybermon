@@ -1,4 +1,5 @@
 import { IconParachute } from "@tabler/icons-react";
+import Image from "next/image";
 
 const Catching = () => {
   return (
@@ -21,6 +22,7 @@ const Catching = () => {
           Explore Cyberland
         </button>
       </div>
+      <Image src="/catching.gif" width={600} height={200} alt="catching-gif" />
     </div>
   );
 };

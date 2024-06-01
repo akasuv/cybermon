@@ -3,7 +3,9 @@ import Unrevealed from "./Unrevealed";
 const Catched = ({
   tx,
   successCallback,
+  ts,
 }: {
+  ts: number;
   tx: string;
   successCallback: () => void;
 }) => {
@@ -11,7 +13,7 @@ const Catched = ({
     <div className="flex flex-col gap-y-10">
       <p className="text-[72px] leading-[64px] font-serif">Catched!</p>
       <div className="w-full flex justify-center">
-        <Unrevealed tx={tx} successCallback={successCallback} />
+        <Unrevealed ts={ts} tx={tx} successCallback={successCallback} />
       </div>
     </div>
   );

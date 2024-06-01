@@ -1,6 +1,8 @@
 import { useAccount } from "wagmi";
 import { useMutation } from "@tanstack/react-query";
 import apiClient from "../configs/apiClient";
+import { IconLoader2 } from "@tabler/icons-react";
+import { format } from "date-fns";
 
 const Level = () => <div className="w-full h-12 bg-white rounded-lg"></div>;
 const Energy = () => <div className="w-full h-12 bg-white rounded-lg"></div>;
@@ -8,7 +10,9 @@ const Energy = () => <div className="w-full h-12 bg-white rounded-lg"></div>;
 const Unrevealed = ({
   tx,
   successCallback,
+  ts,
 }: {
+  ts: number;
   tx: string;
   successCallback: () => void;
 }) => {
@@ -25,11 +29,11 @@ const Unrevealed = ({
   });
 
   return (
-    <div className="w-[444px] h-[370px] bg-[#EDEDE7] p-4 rounded-2xl">
-      <div className="flex h-[284px] gap-x-3">
+    <div className="w-[444px] h-[304px] bg-[#EDEDE7] p-4 rounded-2xl">
+      <div className="flex h-[200px] gap-x-3">
         <div className="h-full w-[200px] bg-white rounded-2xl overflow-hidden">
           <img
-            src="/unrevealed.jpg"
+            src="/unrevealed.png"
             alt="Unrevealed"
             width={200}
             height="100%"
@@ -37,8 +41,8 @@ const Unrevealed = ({
         </div>
         <div className="w-[200px] flex flex-col gap-y-3 self-end">
           <div>
-            <p className="text-[40px]">???</p>
-            <p className="text-xs">June 02, 2024</p>
+            <p className="text-[40px] font-serif">???</p>
+            <p className="text-xs">{ts && format(ts * 1000, "yyyy-MM-dd")}</p>
             <p className="text-xs">We meet on-chain at</p>
             <a
               className="text-xs font-thin break-all hover:underline block"
@@ -51,9 +55,17 @@ const Unrevealed = ({
         </div>
       </div>
       <button
-        className="text-sm bg-black px-4 py-2 rounded-full text-white mt-8 whitespace-nowrap"
+        className="text-sm bg-black px-2 py-1 rounded-full text-white w-full self-center flex gap-x-2 justify-center mt-4"
         onClick={() => mutate()}
       >
+        {isPending && (
+          <IconLoader2
+            size={20}
+            strokeWidth={1}
+            color="white"
+            className="animate-spin"
+          />
+        )}
         I swear I will take good care of it <br /> and feed it for life 3{">"}
       </button>
     </div>

@@ -13,7 +13,7 @@ import { useEffect, useState } from "react";
 
 export default function Home() {
   const { address, isConnected } = useAccount();
-  const { status, data, error, isFetching, refetch } = useQuery({
+  const { status, data, error, isFetching, isFetched, refetch } = useQuery({
     queryKey: ["/me/basic", { address }],
     queryFn: async ({ queryKey }) => {
       const { data } = await apiClient.get(`${queryKey[0]}?address=${address}`);
@@ -22,7 +22,7 @@ export default function Home() {
     enabled: !!address,
   });
 
-  const [shouldShowCatching, setShouldShowCatching] = useState(false);
+  const [shouldShowCatching, setShouldShowCatching] = useState(true);
 
   const shouldShowIntro = !isConnected;
   const shouldShowMonCatchers =
@@ -45,12 +45,13 @@ export default function Home() {
       );
       return data;
     },
-    enabled: !!shouldShowCatching,
+    enabled: true,
     refetchInterval: 3000,
   });
 
   const shouldShowCatched = catchingData?.data.catched;
   const catchedHash = catchingData?.data.catched_tx;
+  const catchedTS = catchingData?.data.catched_ts;
   const shouldShowExplore = data?.data.cybermon_count > 0;
 
   useEffect(() => {
@@ -69,6 +70,20 @@ export default function Home() {
       return <Explore />;
     }
 
+    if (shouldShowCatched) {
+      return (
+        <Catched
+          ts={catchedTS}
+          tx={catchedHash}
+          successCallback={() => {
+            refetch();
+          }}
+        />
+      );
+    }
+    if (shouldShowCatching && !catchingData?.data.catched) {
+      return <Catching />;
+    }
     if (shouldShowMonCatchers) {
       return (
         <MonCatchers
@@ -79,20 +94,7 @@ export default function Home() {
       );
     }
 
-    if (shouldShowCatching && !catchingData?.data.catched) {
-      return <Catching />;
-    }
-
-    if (shouldShowCatched) {
-      return (
-        <Catched
-          tx={catchedHash}
-          successCallback={() => {
-            refetch();
-          }}
-        />
-      );
-    }
+    return <Intro />;
   };
 
   return (
